@@ -118,11 +118,12 @@ class FileUserStore {
       if (fs.existsSync(this.filename)) {
         const data = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         data.forEach(user => {
-          // Convertir Uint8Arrays de vuelta desde arrays
+          // Convertir Uint8Arrays de vuelta desde arrays (solo publicKey)
           user.credentials = user.credentials.map(cred => ({
             ...cred,
             publicKey: new Uint8Array(cred.publicKey),
-            id: new Uint8Array(cred.id)
+            createdAt: cred.createdAt ? new Date(cred.createdAt) : undefined,
+            lastUsedAt: cred.lastUsedAt ? new Date(cred.lastUsedAt) : undefined
           }));
           this.users.set(user.id, user);
           this.usernameIndex.set(user.username, user.id);
@@ -141,8 +142,8 @@ class FileUserStore {
         ...user,
         credentials: user.credentials.map(cred => ({
           ...cred,
-          publicKey: Array.from(cred.publicKey),
-          id: Array.from(cred.id)
+          publicKey: Array.from(cred.publicKey)
+          // id is already a string, no conversion needed
         }))
       }));
       fs.writeFileSync(this.filename, JSON.stringify(data, null, 2));
@@ -179,17 +180,36 @@ class FileUserStore {
   async addCredential(userId, credential) {
     const user = this.users.get(userId);
     if (!user) throw new Error(`Usuario ${userId} no encontrado`);
-    
-    const existingIndex = user.credentials.findIndex(cred => 
-      cred.id.toString() === credential.id.toString()
+
+    const existingIndex = user.credentials.findIndex(cred =>
+      cred.id === credential.id
     );
-    
+
     if (existingIndex >= 0) {
       user.credentials[existingIndex] = credential;
     } else {
       user.credentials.push(credential);
     }
-    
+
+    this.users.set(userId, user);
+    this.saveToFile();
+  }
+
+  async getUserByCredentialId(credentialId) {
+    for (const user of this.users.values()) {
+      const credential = user.credentials.find(cred => cred.id === credentialId);
+      if (credential) {
+        return { user, credential };
+      }
+    }
+    return null;
+  }
+
+  async removeCredential(userId, credentialId) {
+    const user = this.users.get(userId);
+    if (!user) throw new Error(`Usuario ${userId} no encontrado`);
+
+    user.credentials = user.credentials.filter(cred => cred.id !== credentialId);
     this.users.set(userId, user);
     this.saveToFile();
   }

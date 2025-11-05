@@ -9,8 +9,7 @@
     "dev": "tsc --watch",
     "test": "jest",
     "prepublishOnly": "npm run build",
-    "example:server": "node examples/server.js",
-    "example:demo": "cd examples/demo && python3 -m http.server 8080"
+    "demo": "npm run build && node examples/server/basic-server.js"
   },
   "keywords": [
     "passkeys",
