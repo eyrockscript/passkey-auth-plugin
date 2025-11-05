@@ -422,6 +422,12 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [ ] Enhanced analytics and logging
 - [ ] Credential usage statistics
 
+## ☕ Support This Project
+
+If you find this plugin useful, consider supporting its development:
+
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/cNi00igBN2Ki881b756EU00)
+
 ---
 
 **⭐ If you find this project useful, give it a star on GitHub!**

@@ -418,6 +418,12 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 - [ ] Analytics y logging mejorados
 - [ ] Estadísticas de uso de credenciales
 
+## ☕ Apoya Este Proyecto
+
+Si este plugin te resulta útil, considera apoyar su desarrollo:
+
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/cNi00igBN2Ki881b756EU00)
+
 ---
 
 **⭐ Si este proyecto te resulta útil, ¡dale una estrella en GitHub!**
