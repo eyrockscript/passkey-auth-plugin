@@ -353,20 +353,14 @@ cd passkey-auth-plugin
 # Install dependencies
 npm install
 
-# Run demo (builds and starts server)
-npm run demo
+# Build the project
+npm run build
+
+# Run the example server
+node examples/server/basic-server.js
 ```
 
 Visit `http://localhost:3000` to see the interactive demo.
-
-**Manual steps:**
-```bash
-# Build the project first
-npm run build
-
-# Then run the example server
-node examples/server/basic-server.js
-```
 
 ## 🧪 Included Examples
 
