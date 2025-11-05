@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Passkey Auth Plugin</title>
+    <title>Demo Educativo - Passkey Auth Plugin</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 10px;
@@ -30,45 +30,319 @@
         }
 
         .header {
-            background: #4f46e5;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.03)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
             margin-bottom: 10px;
-            font-size: 2em;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
+            opacity: 0.95;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+            backdrop-filter: blur(10px);
         }
 
         .content {
             padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .info-sidebar {
+                order: -1;
+            }
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .info-sidebar {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .info-sidebar h3 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4f46e5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .info-box h4 {
+            color: #4f46e5;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .info-box p {
+            font-size: 0.9em;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            margin-top: 10px;
+            padding-left: 20px;
+            font-size: 0.9em;
+            color: #64748b;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .progress-tracker {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.completed {
+            background: #d1fae5;
+        }
+
+        .progress-step.active {
+            background: #dbeafe;
+            border: 2px solid #4f46e5;
+        }
+
+        .progress-step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            background: #e2e8f0;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .progress-step.completed .progress-step-number {
+            background: #059669;
+            color: white;
+        }
+
+        .progress-step.active .progress-step-number {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .progress-step-text {
+            font-size: 0.9em;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .progress-step.completed .progress-step-text {
+            color: #059669;
+        }
+
+        .progress-step.active .progress-step-text {
+            color: #4f46e5;
+        }
+
+        .intro-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 2px solid #c7d2fe;
+        }
+
+        .intro-section h2 {
+            color: #3730a3;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .intro-section p {
+            color: #4c1d95;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1em;
+        }
+
+        .comparison-card.old h4 {
+            color: #dc2626;
+        }
+
+        .comparison-card.new h4 {
+            color: #059669;
+        }
+
+        .comparison-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-card li {
+            padding: 8px 0;
+            font-size: 0.95em;
+            color: #64748b;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .comparison-card li::before {
+            content: '•';
+            color: #cbd5e1;
+            font-weight: bold;
+            display: inline-block;
         }
 
         .auth-section {
             margin-bottom: 40px;
-            padding: 25px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
+            padding: 30px;
+            border: 3px solid #e5e7eb;
+            border-radius: 12px;
             background: #f9fafb;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #e5e7eb;
+            transition: all 0.3s;
         }
 
         .auth-section.active {
             border-color: #4f46e5;
             background: #eef2ff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        }
+
+        .auth-section.active::before {
+            background: #4f46e5;
+        }
+
+        .auth-section.completed::before {
+            background: #059669;
         }
 
         .auth-section h2 {
             color: #374151;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 1.6em;
+        }
+
+        .section-description {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0 20px 0;
+            border-left: 3px solid #4f46e5;
+            font-size: 0.95em;
+            color: #475569;
+        }
+
+        .section-description strong {
+            color: #1e293b;
         }
 
         .form-group {
@@ -241,11 +515,90 @@
             margin: 20px 0;
         }
 
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            color: #4f46e5;
+            font-weight: 600;
+            border-bottom: 1px dashed #4f46e5;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 280px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: left;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -140px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85em;
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .faq-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            font-size: 0.9em;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
         .tabs {
             display: flex;
             background: #f3f4f6;
             border-radius: 8px 8px 0 0;
             overflow: hidden;
+            margin-top: 30px;
         }
 
         .tab {
@@ -254,7 +607,12 @@
             text-align: center;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: #e5e7eb;
         }
 
         .tab.active {
@@ -262,57 +620,160 @@
             color: white;
         }
 
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #7c3aed;
+        }
+
         .tab-content {
             display: none;
+            animation: fadeIn 0.3s;
         }
 
         .tab-content.active {
             display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tech-flow {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .tech-flow h4 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border-left: 3px solid #4f46e5;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 640px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Passkey Auth Plugin</h1>
-            <p>Demo interactivo de autenticación sin contraseña con WebAuthn</p>
+            <div class="header-content">
+                <h1>🔐 Passkey Auth Plugin</h1>
+                <p>Demo interactivo y educativo de autenticación sin contraseña</p>
+                <div class="header-badge">✨ Tutorial Paso a Paso con WebAuthn</div>
+            </div>
         </div>
 
         <div class="content">
-            <!-- Información sobre Passkeys -->
-            <div class="feature-list">
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Más Seguro</h3>
-                    <p>Resistente a phishing y ataques de fuerza bruta</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Más Rápido</h3>
-                    <p>Login instantáneo con biometría o PIN</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔑</div>
-                    <h3>Sin Contraseñas</h3>
-                    <p>Elimina el riesgo de contraseñas débiles</p>
-                </div>
-            </div>
+            <div class="main-content">
+                <!-- Sección Introductoria Educativa -->
+                <div class="intro-section">
+                    <h2>📚 ¿Qué son las Passkeys?</h2>
+                    <p>
+                        Las <span class="tooltip">passkeys<span class="tooltiptext">Credenciales criptográficas basadas en WebAuthn que reemplazan contraseñas tradicionales</span></span>
+                        son el futuro de la autenticación web. Utilizan <strong>criptografía de clave pública</strong> para permitirte
+                        iniciar sesión con tu huella digital, Face ID, o un PIN del dispositivo.
+                    </p>
+                    <p>
+                        <strong>¿Por qué son mejores?</strong> A diferencia de las contraseñas, las passkeys no se pueden robar,
+                        adivinar, ni interceptar. Son únicas para cada sitio y nunca salen de tu dispositivo.
+                    </p>
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('demo')">Demo Interactivo</div>
-                <div class="tab" onclick="switchTab('code')">Ejemplos de Código</div>
-            </div>
+                    <!-- Comparación Visual -->
+                    <div class="comparison-grid">
+                        <div class="comparison-card old">
+                            <h4>🔓 Autenticación Tradicional</h4>
+                            <ul>
+                                <li>Contraseñas débiles o reutilizadas</li>
+                                <li>Vulnerable a phishing</li>
+                                <li>Requiere recordar/gestionar</li>
+                                <li>Puede ser interceptada</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card new">
+                            <h4>🔐 Passkeys (WebAuthn)</h4>
+                            <ul>
+                                <li>Criptografía de clave pública</li>
+                                <li>Resistente a phishing</li>
+                                <li>Sin memorizar nada</li>
+                                <li>Nunca sale del dispositivo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Demo Tab -->
-            <div class="tab-content active" id="demo-content">
-                <!-- Sección 1: Registro Tradicional -->
-                <div class="auth-section" id="traditional-auth">
-                    <h2>
-                        <span>1️⃣</span>
-                        Registro Tradicional
-                    </h2>
-                    <p>Primero, regístrate con el método tradicional (email + contraseña):</p>
+                <!-- Feature Cards --><div class="feature-list">
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Más Seguro</h3>
+                        <p>Resistente a phishing y ataques de fuerza bruta</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Más Rápido</h3>
+                        <p>Login instantáneo con biometría o PIN</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔑</div>
+                        <h3>Sin Contraseñas</h3>
+                        <p>Elimina el riesgo de contraseñas débiles</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('demo')">🎮 Demo Interactivo</div>
+                    <div class="tab" onclick="switchTab('code')">💻 Ejemplos de Código</div>
+                    <div class="tab" onclick="switchTab('faq')">❓ Preguntas Frecuentes</div>
+                </div>
+
+                <!-- Demo Tab -->
+                <div class="tab-content active" id="demo-content">
+                    <!-- Sección 1: Registro Tradicional -->
+                    <div class="auth-section" id="traditional-auth">
+                        <h2>
+                            <span>1️⃣</span>
+                            Registro Tradicional
+                        </h2>
+                        <div class="section-description">
+                            <strong>📍 Estás aquí:</strong> Primero necesitamos crear una cuenta de usuario usando el método tradicional.
+                            Esto simula el registro normal con email y contraseña que ya conoces.
+                            <br><br>
+                            <strong>💡 En tu app:</strong> Puedes mantener este método como opción o solo usarlo para el registro inicial,
+                            luego ofrecer configurar passkey para futuros logins.
+                        </div>
                     
                     <div class="form-group">
                         <label for="reg-username">Nombre de usuario:</label>
@@ -336,51 +797,84 @@
                     <div class="message" id="reg-message"></div>
                 </div>
 
-                <!-- Sección 2: Configurar Passkey -->
-                <div class="auth-section" id="passkey-setup">
-                    <h2>
-                        <span>2️⃣</span>
-                        Configurar Passkey
-                        <div class="passkey-status">
-                            <div class="status-dot" id="passkey-dot"></div>
-                            <span id="passkey-status">Sin configurar</span>
+                    <!-- Sección 2: Configurar Passkey -->
+                    <div class="auth-section" id="passkey-setup">
+                        <h2>
+                            <span>2️⃣</span>
+                            Configurar Passkey
+                            <div class="passkey-status">
+                                <div class="status-dot" id="passkey-dot"></div>
+                                <span id="passkey-status">Sin configurar</span>
+                            </div>
+                        </h2>
+                        <div class="section-description">
+                            <strong>🔐 ¿Qué sucede aquí?</strong> Al hacer clic en "Configurar Passkey", tu navegador:
+                            <br>
+                            1️⃣ Genera un par de <span class="tooltip">claves criptográficas<span class="tooltiptext">Clave privada (se queda en tu dispositivo) y clave pública (se envía al servidor)</span></span>
+                            <br>
+                            2️⃣ Te pedirá verificación biométrica (huella, Face ID) o PIN
+                            <br>
+                            3️⃣ Almacena la clave privada de forma segura en tu dispositivo
+                            <br>
+                            4️⃣ Envía solo la clave pública al servidor
+                            <br><br>
+                            <strong>🛡️ Seguridad:</strong> La clave privada NUNCA sale de tu dispositivo, por eso es imposible robarla.
                         </div>
-                    </h2>
-                    <p>Una vez registrado, configura tu passkey para futuros logins sin contraseña:</p>
 
-                    <button class="btn btn-passkey" id="setup-passkey-btn" onclick="setupPasskey()" disabled>
-                        🔑 Configurar Passkey
-                    </button>
+                        <button class="btn btn-passkey" id="setup-passkey-btn" onclick="setupPasskey()" disabled>
+                            🔑 Configurar Passkey
+                        </button>
 
-                    <div class="message" id="passkey-message"></div>
+                        <div class="message" id="passkey-message"></div>
+                    </div>
+
+                    <!-- Sección 3: Login con Passkey -->
+                    <div class="auth-section" id="passkey-login">
+                        <h2>
+                            <span>3️⃣</span>
+                            Login con Passkey
+                        </h2>
+                        <div class="section-description">
+                            <strong>⚡ El momento de la verdad:</strong> Ahora puedes autenticarte instantáneamente sin escribir contraseñas.
+                            <br><br>
+                            <strong>🔄 Proceso técnico:</strong>
+                            <br>
+                            1️⃣ El servidor envía un <span class="tooltip">challenge<span class="tooltiptext">Un valor aleatorio único que debe ser firmado con tu clave privada</span></span> (desafío)
+                            <br>
+                            2️⃣ Tu dispositivo firma el challenge con la clave privada
+                            <br>
+                            3️⃣ El servidor verifica la firma con la clave pública
+                            <br>
+                            4️⃣ Si coincide, ¡estás autenticado! ✅
+                            <br><br>
+                            <strong>🎯 Ventaja:</strong> Todo esto sucede en 1-2 segundos, mucho más rápido que escribir una contraseña.
+                        </div>
+
+                        <button class="btn btn-passkey" id="login-passkey-btn" onclick="loginWithPasskey()" disabled>
+                            🚀 Login con Passkey
+                        </button>
+
+                        <div class="message" id="login-message"></div>
+                    </div>
+
+                    <!-- Sección 4: Usuario Logueado -->
+                    <div class="user-info" id="user-info">
+                        <h3>✅ ¡Sesión Iniciada Exitosamente!</h3>
+                        <div id="user-details"></div>
+                        <div style="margin-top: 15px; padding: 12px; background: #f0f9ff; border-radius: 6px; font-size: 0.9em;">
+                            <strong>🎓 Aprendiste:</strong> Completaste el flujo completo de passkeys!
+                            Ahora puedes implementar esto en tu aplicación.
+                        </div>
+                        <button class="btn btn-secondary" onclick="logout()">🔄 Reiniciar Demo</button>
+                    </div>
                 </div>
 
-                <!-- Sección 3: Login con Passkey -->
-                <div class="auth-section" id="passkey-login">
-                    <h2>
-                        <span>3️⃣</span>
-                        Login con Passkey
-                    </h2>
-                    <p>¡Ahora puedes hacer login instantáneamente con tu passkey!</p>
-
-                    <button class="btn btn-passkey" id="login-passkey-btn" onclick="loginWithPasskey()" disabled>
-                        🚀 Login con Passkey
-                    </button>
-
-                    <div class="message" id="login-message"></div>
-                </div>
-
-                <!-- Sección 4: Usuario Logueado -->
-                <div class="user-info" id="user-info">
-                    <h3>✅ ¡Bienvenido!</h3>
-                    <div id="user-details"></div>
-                    <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
-                </div>
-            </div>
-
-            <!-- Code Tab -->
-            <div class="tab-content" id="code-content">
-                <h2>📝 Ejemplos de Código</h2>
+                <!-- Code Tab -->
+                <div class="tab-content" id="code-content">
+                    <h2>📝 Ejemplos de Código</h2>
+                    <p style="margin-bottom: 20px; color: #64748b;">
+                        Estos son los ejemplos de código que necesitas para implementar passkeys en tu aplicación.
+                    </p>
                 
                 <h3>Instalación:</h3>
                 <div class="code-example">npm install passkey-auth-plugin</div>
@@ -412,14 +906,177 @@ const options = await passkeyAuth.generateAuthenticationOptions(userId);
 // Verificar respuesta del cliente
 const result = await passkeyAuth.verifyAuthentication(response, userId);</div>
 
-                <h3>Frontend (JavaScript):</h3>
-                <div class="code-example">// Registrar passkey
+                    <h3>Frontend (JavaScript):</h3>
+                    <div class="code-example">// Registrar passkey
 const { startRegistration } = await import('@simplewebauthn/browser');
 const attResp = await startRegistration(options);
 
 // Autenticar con passkey
 const { startAuthentication } = await import('@simplewebauthn/browser');
 const asseResp = await startAuthentication(options);</div>
+
+                    <div style="margin-top: 30px; padding: 20px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <h3 style="color: #1e40af; margin-bottom: 10px;">📚 Documentación Completa</h3>
+                        <p style="color: #475569;">
+                            Para más detalles sobre implementación, configuración avanzada, y ejemplos completos,
+                            visita el <a href="https://github.com/eyrockscript/passkey-auth-plugin" target="_blank" style="color: #3b82f6; font-weight: 600;">repositorio en GitHub</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Tab -->
+                <div class="tab-content" id="faq-content">
+                    <h2>❓ Preguntas Frecuentes</h2>
+
+                    <div class="faq-section">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Qué navegadores soportan passkeys?
+                            </div>
+                            <div class="faq-answer">
+                                Todos los navegadores modernos soportan WebAuthn/passkeys: Chrome 67+, Firefox 60+, Safari 14+, y Edge 18+.
+                                En dispositivos móviles, iOS 14+ y Android con Chrome también lo soportan.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Qué pasa si pierdo mi dispositivo?
+                            </div>
+                            <div class="faq-answer">
+                                Las passkeys modernas se sincronizan con tu cuenta del sistema (iCloud Keychain, Google Password Manager, etc.).
+                                Si pierdes el dispositivo, tus passkeys siguen disponibles en otros dispositivos con la misma cuenta.
+                                También es recomendable mantener un método de recuperación alternativo.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Es seguro almacenar passkeys en la nube?
+                            </div>
+                            <div class="faq-answer">
+                                Sí. Las passkeys están encriptadas de extremo a extremo cuando se sincronizan. Apple, Google y otros proveedores
+                                no pueden leer tus claves privadas. Además, requieren autenticación biométrica o PIN para usarse.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Puedo tener múltiples passkeys para la misma cuenta?
+                            </div>
+                            <div class="faq-answer">
+                                ¡Sí! Es recomendable crear passkeys en múltiples dispositivos (teléfono, laptop, tablet) para mayor flexibilidad.
+                                Cada passkey es independiente y puedes revocar cualquiera individualmente.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Debo eliminar completamente las contraseñas?
+                            </div>
+                            <div class="faq-answer">
+                                Depende de tu caso de uso. Muchas aplicaciones mantienen contraseñas como método de respaldo o para usuarios
+                                con dispositivos antiguos. Lo ideal es ofrecer passkeys como opción preferida pero mantener alternativas.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Cómo funcionan técnicamente las passkeys?
+                            </div>
+                            <div class="faq-answer">
+                                Las passkeys usan criptografía de clave pública (específicamente el estándar WebAuthn). Al registrarte, se genera
+                                un par de claves: una privada (permanece en tu dispositivo) y una pública (se guarda en el servidor). Para autenticarte,
+                                el servidor envía un desafío que solo tu clave privada puede firmar, y el servidor verifica la firma con tu clave pública.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>❓</span> ¿Es difícil implementar passkeys en mi aplicación?
+                            </div>
+                            <div class="faq-answer">
+                                Con este plugin es muy sencillo. En el backend solo necesitas unas pocas líneas de código para configurar el plugin,
+                                y en el frontend usas la librería SimpleWebAuthn. El plugin maneja toda la complejidad de WebAuthn por ti.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-flow">
+                        <h4>🔄 Flujo Técnico Simplificado</h4>
+                        <div class="flow-steps">
+                            <div class="flow-step">
+                                <strong>1. Registro:</strong> Cliente solicita → Servidor genera options → Cliente crea credential → Servidor verifica y guarda clave pública
+                            </div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">
+                                <strong>2. Autenticación:</strong> Cliente solicita → Servidor envía challenge → Cliente firma con clave privada → Servidor verifica firma
+                            </div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step">
+                                <strong>3. Éxito:</strong> Usuario autenticado sin contraseñas 🎉
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar con información contextual -->
+            <div class="info-sidebar">
+                <h3>📊 Tu Progreso</h3>
+                <div class="progress-tracker">
+                    <div class="progress-step" id="progress-1">
+                        <div class="progress-step-number">1</div>
+                        <div class="progress-step-text">Registro</div>
+                    </div>
+                    <div class="progress-step" id="progress-2">
+                        <div class="progress-step-number">2</div>
+                        <div class="progress-step-text">Configurar Passkey</div>
+                    </div>
+                    <div class="progress-step" id="progress-3">
+                        <div class="progress-step-number">3</div>
+                        <div class="progress-step-text">Login con Passkey</div>
+                    </div>
+                </div>
+
+                <h3>💡 Información</h3>
+                <div class="info-box" id="context-info">
+                    <h4>Bienvenido al Tutorial</h4>
+                    <p>
+                        Este demo interactivo te guiará paso a paso a través del proceso de implementar
+                        autenticación con passkeys en tu aplicación.
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4>🔐 Seguridad</h4>
+                    <p>Las passkeys son resistentes a:</p>
+                    <ul>
+                        <li>Phishing</li>
+                        <li>Ataques de fuerza bruta</li>
+                        <li>Credential stuffing</li>
+                        <li>Intercepción de red</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h4>⚡ Compatibilidad</h4>
+                    <p>Funciona con:</p>
+                    <ul>
+                        <li>Touch ID / Face ID (Apple)</li>
+                        <li>Windows Hello</li>
+                        <li>Huella Android</li>
+                        <li>Llaves de seguridad (YubiKey)</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h4>📱 Multi-dispositivo</h4>
+                    <p>
+                        Las passkeys se sincronizan automáticamente entre tus dispositivos
+                        usando iCloud Keychain o Google Password Manager.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
