@@ -1,11 +1,26 @@
 # 🔐 Passkey Auth Plugin
 
-*[Read this README in Spanish / Leer en Español](./README.es.md)*
+*[Read in English / Leer en Inglés](./README.md)*
 
-Un plugin completo para integrar **passkeys (WebAuthn)** como método de autenticación sin contraseña en aplicaciones Node.js. Ideal para añadir autenticación biométrica después de una validación inicial de identidad.
+**Un plugin completo y listo para producción que integra passkeys (WebAuthn) como método de autenticación sin contraseña en aplicaciones Node.js.** Añade autenticación biométrica (Face ID, Touch ID, huella digital) a tu aplicación en minutos.
 
-[![npm version](https://badge.fury.io/js/passkey-auth-plugin.svg)](https://badge.fury.io/js/passkey-auth-plugin)
+[![npm version](https://img.shields.io/npm/v/passkey-auth-plugin.svg)](https://www.npmjs.com/package/passkey-auth-plugin)
+[![npm downloads](https://img.shields.io/npm/dm/passkey-auth-plugin.svg)](https://www.npmjs.com/package/passkey-auth-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js CI](https://github.com/eyrockscript/passkey-auth-plugin/workflows/CI/badge.svg)](https://github.com/eyrockscript/passkey-auth-plugin/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+
+---
+
+## 🎯 ¿Qué es esto?
+
+Este plugin te permite añadir **autenticación sin contraseña** a tus aplicaciones Node.js/Express usando **passkeys de WebAuthn**. Los usuarios pueden iniciar sesión usando:
+- 🔐 Face ID / Touch ID (iOS/macOS)
+- 👆 Sensores de huella digital (Android/Windows)
+- 🔑 Llaves de seguridad (YubiKey, etc.)
+- 📱 Autenticadores de plataforma
+
+**Perfecto para:** Aplicaciones SaaS, paneles de administración, plataformas de e-commerce, aplicaciones bancarias, o cualquier aplicación que requiera autenticación segura y amigable.
 
 ## ✨ Características
 
@@ -377,17 +392,26 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 ## 🙋‍♂️ Soporte
 
-- 📚 [Documentación completa](https://github.com/tuusuario/passkey-auth-plugin/wiki)
-- 🐛 [Reportar bugs](https://github.com/tuusuario/passkey-auth-plugin/issues)
-- 💬 [Discusiones](https://github.com/tuusuario/passkey-auth-plugin/discussions)
+- 📚 [Guía de Database Stores](./DATABASE_STORES.md)
+- 📖 [Documentación Completa](https://github.com/eyrockscript/passkey-auth-plugin)
+- 🐛 [Reportar Bugs](https://github.com/eyrockscript/passkey-auth-plugin/issues)
+- 💬 [Discusiones](https://github.com/eyrockscript/passkey-auth-plugin/discussions)
+- 🤝 [Guía de Contribución](./CONTRIBUTING.md)
 
 ## 🎯 Roadmap
 
-- [ ] Soporte para autenticación condicional
-- [ ] Integración con frameworks populares (Next.js, Nuxt.js)
-- [ ] Gestión avanzada de credenciales
-- [ ] Métricas y analytics
-- [ ] Plugin para bases de datos populares
+### ✅ Completado (v1.1.0)
+- ✅ Gestión avanzada de credenciales (listar, eliminar, actualizar, metadatos)
+- ✅ Plugins para bases de datos populares (MongoDB, PostgreSQL, MySQL)
+- ✅ Suite completa de tests (55+ pruebas)
+- ✅ CI/CD con GitHub Actions
+
+### 🔜 Próximamente
+- [ ] Soporte para autenticación condicional (mediation: 'conditional')
+- [ ] Ejemplos de integración (Next.js, Nuxt.js)
+- [ ] Middleware de rate limiting
+- [ ] Analytics y logging mejorados
+- [ ] Estadísticas de uso de credenciales
 
 ---
 
