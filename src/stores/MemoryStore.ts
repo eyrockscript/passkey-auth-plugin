@@ -73,8 +73,19 @@ export class MemoryUserStore implements UserStore {
   async getUserByUsername(username: string): Promise<PasskeyUser | null> {
     const userId = this.usernameIndex.get(username);
     if (!userId) return null;
-    
+
     return this.users.get(userId) || null;
+  }
+
+  async getUserByCredentialId(credentialId: string): Promise<{ user: PasskeyUser; credential: PasskeyCredential } | null> {
+    // Buscar en todos los usuarios por credential ID
+    for (const user of this.users.values()) {
+      const credential = user.credentials.find(cred => cred.id === credentialId);
+      if (credential) {
+        return { user, credential };
+      }
+    }
+    return null;
   }
 
   async updateUser(user: PasskeyUser): Promise<PasskeyUser> {

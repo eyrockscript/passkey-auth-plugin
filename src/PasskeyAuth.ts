@@ -88,17 +88,19 @@ export class PasskeyAuth {
       };
 
       const verification = await verifyRegistrationResponse(opts);
-      
+
       if (verification.verified && verification.registrationInfo) {
-        const { credentialID, credentialPublicKey, counter, credentialDeviceType, credentialBackedUp } = verification.registrationInfo;
-        
+        const { credential: cred, credentialDeviceType, credentialBackedUp } = verification.registrationInfo;
+
         const credential: PasskeyCredential = {
-          id: credentialID,
-          publicKey: credentialPublicKey,
-          counter,
+          id: cred.id,
+          publicKey: cred.publicKey,
+          counter: cred.counter,
           deviceType: credentialDeviceType,
           backedUp: credentialBackedUp,
           transports: response.response.transports,
+          createdAt: new Date(),
+          lastUsedAt: new Date(),
         };
 
         await this.userStore.addCredential(userId, credential);
@@ -151,28 +153,31 @@ export class PasskeyAuth {
    */
   async verifyAuthentication(response: any, userId?: string): Promise<AuthenticationResult> {
     try {
-      // Buscar el usuario por credential ID si no se proporciona userId
+      // Buscar el usuario y credencial
       let user: PasskeyUser | null = null;
       let credential: PasskeyCredential | undefined;
 
       if (userId) {
+        // Búsqueda por userId (más eficiente)
         user = await this.userStore.getUserById(userId);
+        if (!user) {
+          return { verified: false, error: 'Usuario no encontrado' };
+        }
+        credential = user.credentials.find(cred => cred.id === response.id);
+        if (!credential) {
+          return { verified: false, error: 'Credencial no encontrada' };
+        }
       } else {
-        // Buscar en todos los usuarios por credential ID
-        // Esta es una implementación simplificada - en producción sería más eficiente
-        throw new Error('Búsqueda por credential ID no implementada en esta versión');
+        // Búsqueda por credential ID (resident keys / discoverable credentials)
+        const result = await this.userStore.getUserByCredentialId(response.id);
+        if (!result) {
+          return { verified: false, error: 'Credencial no encontrada' };
+        }
+        user = result.user;
+        credential = result.credential;
       }
 
-      if (!user) {
-        return { verified: false, error: 'Usuario no encontrado' };
-      }
-
-      credential = user.credentials.find(cred => cred.id === response.id);
-      if (!credential) {
-        return { verified: false, error: 'Credencial no encontrada' };
-      }
-
-      const challengeKey = `auth_${userId}`;
+      const challengeKey = userId ? `auth_${userId}` : `auth_${response.challenge || user.id}`;
       const expectedChallenge = this.challengeStore.get(challengeKey);
       if (!expectedChallenge) {
         return { verified: false, error: 'Challenge no encontrado o expirado' };
@@ -183,9 +188,9 @@ export class PasskeyAuth {
         expectedChallenge,
         expectedOrigin: this.config.origin,
         expectedRPID: this.config.rpID,
-        authenticator: {
-          credentialID: credential.id,
-          credentialPublicKey: credential.publicKey,
+        credential: {
+          id: credential.id,
+          publicKey: new Uint8Array(credential.publicKey),
           counter: credential.counter,
           transports: credential.transports,
         },
@@ -193,13 +198,14 @@ export class PasskeyAuth {
       };
 
       const verification = await verifyAuthenticationResponse(opts);
-      
+
       if (verification.verified) {
-        // Actualizar contador si cambió
+        // Actualizar contador y timestamp
         if (verification.authenticationInfo.newCounter !== credential.counter) {
           credential.counter = verification.authenticationInfo.newCounter;
-          await this.userStore.updateUser(user);
         }
+        credential.lastUsedAt = new Date();
+        await this.userStore.updateUser(user);
 
         this.challengeStore.delete(challengeKey);
         return { verified: true, user, credential };
@@ -223,5 +229,71 @@ export class PasskeyAuth {
    */
   async getUserByUsername(username: string): Promise<PasskeyUser | null> {
     return this.userStore.getUserByUsername(username);
+  }
+
+  /**
+   * Lista todas las credenciales de un usuario
+   */
+  async listCredentials(userId: string): Promise<PasskeyCredential[]> {
+    const user = await this.userStore.getUserById(userId);
+    return user?.credentials || [];
+  }
+
+  /**
+   * Obtiene detalles de una credencial específica
+   */
+  async getCredential(userId: string, credentialId: string): Promise<PasskeyCredential | null> {
+    const user = await this.userStore.getUserById(userId);
+    if (!user) return null;
+
+    const credential = user.credentials.find(cred => cred.id === credentialId);
+    return credential || null;
+  }
+
+  /**
+   * Elimina una credencial específica de un usuario
+   */
+  async removeCredential(userId: string, credentialId: string): Promise<boolean> {
+    if (!this.userStore.removeCredential) {
+      throw new Error('UserStore does not support removeCredential operation');
+    }
+
+    try {
+      await this.userStore.removeCredential(userId, credentialId);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Actualiza los metadatos de una credencial (nombre, etc.)
+   */
+  async updateCredentialMetadata(
+    userId: string,
+    credentialId: string,
+    metadata: { name?: string }
+  ): Promise<boolean> {
+    const user = await this.userStore.getUserById(userId);
+    if (!user) return false;
+
+    const credential = user.credentials.find(cred => cred.id === credentialId);
+    if (!credential) return false;
+
+    // Actualizar metadatos
+    if (metadata.name !== undefined) {
+      credential.name = metadata.name;
+    }
+
+    await this.userStore.updateUser(user);
+    return true;
+  }
+
+  /**
+   * Cuenta el número de credenciales de un usuario
+   */
+  async countCredentials(userId: string): Promise<number> {
+    const user = await this.userStore.getUserById(userId);
+    return user?.credentials.length || 0;
   }
 }

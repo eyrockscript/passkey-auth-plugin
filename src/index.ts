@@ -13,10 +13,15 @@ export type {
 } from './types';
 
 // Exportar implementaciones por defecto
-export { 
-  MemoryChallengeStore, 
-  MemoryUserStore 
+export {
+  MemoryChallengeStore,
+  MemoryUserStore
 } from './stores/MemoryStore';
+
+// Exportar database stores (opcional - requieren instalar dependencias)
+export { MongoDBUserStore } from './stores/database/MongoDBStore';
+export { PostgreSQLUserStore } from './stores/database/PostgreSQLStore';
+export { MySQLUserStore } from './stores/database/MySQLStore';
 
 // Exportar utilidades para Express.js
 export { createExpressMiddleware, createExpressRoutes } from './middleware/express';
