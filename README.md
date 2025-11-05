@@ -346,16 +346,27 @@ if (!window.PublicKeyCredential) {
 The plugin includes a complete demo you can run locally:
 
 ```bash
-# Build the plugin
-npm run build
+# Clone the repository
+git clone https://github.com/eyrockscript/passkey-auth-plugin.git
+cd passkey-auth-plugin
 
-# Run demo
-cd examples
+# Install dependencies
 npm install
-npm start
+
+# Run demo (builds and starts server)
+npm run demo
 ```
 
 Visit `http://localhost:3000` to see the interactive demo.
+
+**Manual steps:**
+```bash
+# Build the project first
+npm run build
+
+# Then run the example server
+node examples/server/basic-server.js
+```
 
 ## 🧪 Included Examples
 
