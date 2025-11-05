@@ -152,8 +152,127 @@ export function createExpressRoutes(passkeyAuth: PasskeyAuth) {
         res.status(404).json({ error: 'Usuario no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Error obteniendo usuario',
+        details: (error as Error).message
+      });
+    }
+  });
+
+  // Listar todas las credenciales de un usuario
+  router.get('/passkey/user/:userId/credentials', async (req: PasskeyRequest, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const credentials = await passkeyAuth.listCredentials(userId);
+
+      // Remover información sensible (publicKey)
+      const safeCredentials = credentials.map(cred => ({
+        id: cred.id,
+        deviceType: cred.deviceType,
+        backedUp: cred.backedUp,
+        transports: cred.transports,
+        name: cred.name,
+        createdAt: cred.createdAt,
+        lastUsedAt: cred.lastUsedAt,
+      }));
+
+      res.json({
+        userId,
+        credentials: safeCredentials,
+        count: credentials.length,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error listando credenciales',
+        details: (error as Error).message
+      });
+    }
+  });
+
+  // Obtener información de una credencial específica
+  router.get('/passkey/user/:userId/credentials/:credentialId', async (req: PasskeyRequest, res: Response) => {
+    try {
+      const { userId, credentialId } = req.params;
+      const credential = await passkeyAuth.getCredential(userId, credentialId);
+
+      if (!credential) {
+        return res.status(404).json({ error: 'Credencial no encontrada' });
+      }
+
+      // Remover información sensible
+      const safeCredential = {
+        id: credential.id,
+        deviceType: credential.deviceType,
+        backedUp: credential.backedUp,
+        transports: credential.transports,
+        name: credential.name,
+        createdAt: credential.createdAt,
+        lastUsedAt: credential.lastUsedAt,
+        counter: credential.counter,
+      };
+
+      res.json(safeCredential);
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error obteniendo credencial',
+        details: (error as Error).message
+      });
+    }
+  });
+
+  // Eliminar una credencial
+  router.delete('/passkey/user/:userId/credentials/:credentialId', async (req: PasskeyRequest, res: Response) => {
+    try {
+      const { userId, credentialId } = req.params;
+      const success = await passkeyAuth.removeCredential(userId, credentialId);
+
+      if (success) {
+        res.json({
+          success: true,
+          message: 'Credencial eliminada exitosamente',
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          error: 'No se pudo eliminar la credencial',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error eliminando credencial',
+        details: (error as Error).message
+      });
+    }
+  });
+
+  // Actualizar metadatos de una credencial
+  router.patch('/passkey/user/:userId/credentials/:credentialId', async (req: PasskeyRequest, res: Response) => {
+    try {
+      const { userId, credentialId } = req.params;
+      const { name } = req.body;
+
+      if (!name) {
+        return res.status(400).json({
+          error: 'Se requiere el campo "name"',
+        });
+      }
+
+      const success = await passkeyAuth.updateCredentialMetadata(userId, credentialId, { name });
+
+      if (success) {
+        res.json({
+          success: true,
+          message: 'Credencial actualizada exitosamente',
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          error: 'Usuario o credencial no encontrado',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: 'Error actualizando credencial',
         details: (error as Error).message
       });
     }

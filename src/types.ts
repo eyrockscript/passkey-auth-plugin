@@ -12,6 +12,10 @@ export interface PasskeyCredential {
   deviceType: 'singleDevice' | 'multiDevice';
   backedUp: boolean;
   transports?: AuthenticatorTransport[];
+  // Metadatos opcionales para gestión avanzada
+  name?: string;
+  createdAt?: Date;
+  lastUsedAt?: Date;
 }
 
 export interface PasskeyConfig {
@@ -45,6 +49,8 @@ export interface UserStore {
   createUser(user: Omit<PasskeyUser, 'credentials'>): Promise<PasskeyUser>;
   getUserById(id: string): Promise<PasskeyUser | null>;
   getUserByUsername(username: string): Promise<PasskeyUser | null>;
+  getUserByCredentialId(credentialId: string): Promise<{ user: PasskeyUser; credential: PasskeyCredential } | null>;
   updateUser(user: PasskeyUser): Promise<PasskeyUser>;
   addCredential(userId: string, credential: PasskeyCredential): Promise<void>;
+  removeCredential?(userId: string, credentialId: string): Promise<void>;
 }
