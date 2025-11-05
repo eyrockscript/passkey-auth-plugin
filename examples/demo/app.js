@@ -59,7 +59,7 @@ async function registerTraditional() {
         return;
     }
 
-    const originalText = showLoading('', 'Registrando...');
+    const originalText = showLoading('register-btn', 'Registrando...');
     
     try {
         const response = await fetch('/api/register', {
@@ -73,11 +73,11 @@ async function registerTraditional() {
         if (data.success) {
             currentUser = data.user;
             showMessage('success', '✅ Registro exitoso! Ahora puedes configurar tu passkey.', 'reg-message');
-            
+
             // Activar siguiente sección
             document.getElementById('passkey-setup').classList.add('active');
             document.getElementById('setup-passkey-btn').disabled = false;
-            
+
             // Scroll a la siguiente sección
             document.getElementById('passkey-setup').scrollIntoView({ behavior: 'smooth' });
         } else {
@@ -85,6 +85,8 @@ async function registerTraditional() {
         }
     } catch (error) {
         showMessage('error', 'Error de conexión: ' + error.message, 'reg-message');
+    } finally {
+        hideLoading('register-btn', originalText);
     }
 }
 
