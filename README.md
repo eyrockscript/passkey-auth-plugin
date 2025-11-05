@@ -69,10 +69,14 @@ app.listen(3000);
 
 The automatic routes include:
 - `POST /api/passkey/register/begin` - Start passkey registration
-- `POST /api/passkey/register/finish` - Complete passkey registration  
+- `POST /api/passkey/register/finish` - Complete passkey registration
 - `POST /api/passkey/authenticate/begin` - Start authentication
 - `POST /api/passkey/authenticate/finish` - Complete authentication
 - `GET /api/passkey/user/:userId` - Get user information
+- `GET /api/passkey/user/:userId/credentials` - List all user credentials
+- `GET /api/passkey/user/:userId/credentials/:credentialId` - Get specific credential details
+- `DELETE /api/passkey/user/:userId/credentials/:credentialId` - Remove a credential
+- `PATCH /api/passkey/user/:userId/credentials/:credentialId` - Update credential metadata (name)
 
 ## 📖 Typical Usage Flow
 
