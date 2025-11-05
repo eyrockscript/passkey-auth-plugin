@@ -1,6 +1,6 @@
 {
   "name": "passkey-auth-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Plugin para integrar passkeys (WebAuthn) como forma de autenticación sin contraseña",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -53,7 +53,12 @@
   "files": [
     "dist",
     "examples",
-    "README.md"
+    "README.md",
+    "README.es.md",
+    "DATABASE_STORES.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
   ],
   "overrides": {
     "test-exclude": "^7.0.1",
