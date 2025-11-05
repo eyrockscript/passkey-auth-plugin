@@ -1,0 +1,29 @@
+# Source files
+src/
+tsconfig.json
+
+# Tests
+tests/
+jest.config.js
+coverage/
+
+# Development
+node_modules/
+.git/
+.github/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Demo artifacts
+demo-users.json
+examples/demo-users.json
+
+# OS
+.DS_Store
+Thumbs.db

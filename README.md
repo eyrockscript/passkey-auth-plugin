@@ -2,16 +2,25 @@
 
 *[Leer en Español / Read in Spanish](./README.es.md)*
 
-A complete plugin to integrate **passkeys (WebAuthn)** as a passwordless authentication method in Node.js applications. Perfect for adding biometric authentication after initial identity validation.
+**A complete, production-ready plugin to integrate passkeys (WebAuthn) as a passwordless authentication method in Node.js applications.** Add biometric authentication (Face ID, Touch ID, fingerprint) to your app in minutes.
 
-[![npm version](https://badge.fury.io/js/passkey-auth-plugin.svg)](https://badge.fury.io/js/passkey-auth-plugin)
+[![npm version](https://img.shields.io/npm/v/passkey-auth-plugin.svg)](https://www.npmjs.com/package/passkey-auth-plugin)
+[![npm downloads](https://img.shields.io/npm/dm/passkey-auth-plugin.svg)](https://www.npmjs.com/package/passkey-auth-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js CI](https://github.com/eyrockscript/passkey-auth-plugin/workflows/CI/badge.svg)](https://github.com/eyrockscript/passkey-auth-plugin/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 
-## ☕ Support This Project
+---
 
-If you find this plugin useful, consider supporting its development:
+## 🎯 What is this?
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/cNi00igBN2Ki881b756EU00)
+This plugin allows you to add **passwordless authentication** to your Node.js/Express applications using **WebAuthn passkeys**. Users can log in using:
+- 🔐 Face ID / Touch ID (iOS/macOS)
+- 👆 Fingerprint sensors (Android/Windows)
+- 🔑 Security keys (YubiKey, etc.)
+- 📱 Platform authenticators
+
+**Perfect for:** SaaS applications, admin panels, e-commerce platforms, banking apps, or any application requiring secure, user-friendly authentication.
 
 ## ✨ Features
 
@@ -385,23 +394,29 @@ Contributions are welcome!
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 🙋‍♂️ Support
+## 🙋‍♂️ Support & Documentation
 
-- 📚 [Complete Documentation](https://github.com/eyrockscript/passkey-auth-plugin/wiki)
+- 📚 [Database Stores Guide](./DATABASE_STORES.md)
+- 📖 [Complete Documentation](https://github.com/eyrockscript/passkey-auth-plugin)
 - 🐛 [Report Bugs](https://github.com/eyrockscript/passkey-auth-plugin/issues)
 - 💬 [Discussions](https://github.com/eyrockscript/passkey-auth-plugin/discussions)
-- ☕ [Buy me a coffee](https://buy.stripe.com/cNi00igBN2Ki881b756EU00)
+- 🤝 [Contributing Guide](./CONTRIBUTING.md)
 
 ## 🎯 Roadmap
 
-- [ ] Support for conditional authentication
-- [ ] Integration with popular frameworks (Next.js, Nuxt.js)
-- [ ] Advanced credential management
-- [ ] Metrics and analytics
-- [ ] Popular database plugins
+### ✅ Completed (v1.1.0)
+- ✅ Advanced credential management (list, delete, update, metadata)
+- ✅ Popular database plugins (MongoDB, PostgreSQL, MySQL)
+- ✅ Comprehensive test suite (55+ tests)
+- ✅ CI/CD with GitHub Actions
+
+### 🔜 Upcoming
+- [ ] Support for conditional authentication (mediation: 'conditional')
+- [ ] Integration examples (Next.js, Nuxt.js)
+- [ ] Rate limiting middleware
+- [ ] Enhanced analytics and logging
+- [ ] Credential usage statistics
 
 ---
 
 **⭐ If you find this project useful, give it a star on GitHub!**
-
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/cNi00igBN2Ki881b756EU00)
